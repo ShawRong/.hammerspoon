@@ -1,6 +1,57 @@
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
+require('./modules/ring')
+
+hyper = {"cmd", "alt", "ctrl", "shift"}
+
+hs.hotkey.bind(hyper, "W", function()
   hs.alert.show("Hello World!")
 end)
+
+
+-- key mapping
+hs.hotkey.bind({"ctrl"}, "J", function()
+  hs.eventtap.keyStroke({}, "Down")
+end)
+hs.hotkey.bind({"ctrl"}, "K", function()
+  hs.eventtap.keyStroke({}, "Up")
+end)
+hs.hotkey.bind({"ctrl"}, "H", function()
+  hs.eventtap.keyStroke({}, "Left")
+end)
+hs.hotkey.bind({"ctrl"}, "l", function()
+  hs.eventtap.keyStroke({}, "Right")
+end)
+hs.hotkey.bind({"ctrl"}, ";", function()
+  hs.eventtap.keyStroke({}, "Backspace")
+end)
+hs.hotkey.bind({"ctrl"}, "0", function()
+  hs.eventtap.keyStroke({}, "Home")
+end)
+
+-- spoon install
+hs.loadSpoon("SpoonInstall")
+spoon.SpoonInstall.use_syncinstall = true
+Install = spoon.SpoonInstall
+
+-- text clip board history, not used
+Install:andUse("TextClipboardHistory",
+  {
+    disable = true,
+    config = {
+      show_in_menubar = false,
+    },
+    hotkeys = {
+      toggle_clipboard = { { "cmd", "shift" }, "v" } },
+    start = true
+  }
+)
+
+Install:andUse("Cherry",
+  {
+    hotkeys = {
+      start = { hyper, "t" } },
+  }
+)
+
 
 -- this is for showing the current app's path, name and input method
 hs.hotkey.bind({"ctrl", "cmd"}, ".", function()
@@ -49,3 +100,4 @@ end
 appWatcher = hs.application.watcher.new(applicationWatcher):start()
 
 -- END HERE##################################################################
+
