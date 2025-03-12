@@ -52,6 +52,15 @@ Install:andUse("Cherry",
   }
 )
 
+Install:andUse("BingDaily",
+  {
+    config = {
+      runAt = "21:00"
+    },
+    start = true
+  }
+)
+
 
 -- this is for showing the current app's path, name and input method
 hs.hotkey.bind({"ctrl", "cmd"}, ".", function()
