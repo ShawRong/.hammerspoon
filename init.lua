@@ -2,20 +2,39 @@ require('./modules/ring')
 
 hyper = {"cmd", "alt", "ctrl"}
 hyper_shift = {"cmd", "alt", "ctrl", "shift"}
+ctrl = {"ctrl"}
+
+function get_fortune()
+    -- Replace '/usr/games/fortune' with the actual path from `which fortune`
+
+    local handle = io.popen("/opt/homebrew/bin/fortune | /opt/homebrew/bin/cowsay -r")  
+    local result = handle:read("*a")
+    handle:close()
+    
+    if result and result ~= "" then
+        return result
+    else
+        return "No fortune available or error executing command."
+    end
+end
+
+-- Example usage in Hammerspoon
+hs.alert.show(get_fortune())
 
 hs.hotkey.bind(hyper, "W", function()
-  hs.alert.show("Hello World!")
+  result = get_fortune()
+  hs.alert.show(result, {}, nil, 10)
 end)
 
 
 -- key mapping
-hs.hotkey.bind({"ctrl"}, "J", function()
+hs.hotkey.bind({"ctrl"}, "j", function()
   hs.eventtap.keyStroke({}, "Down")
 end)
-hs.hotkey.bind({"ctrl"}, "K", function()
+hs.hotkey.bind({"ctrl"}, "k", function()
   hs.eventtap.keyStroke({}, "Up")
 end)
-hs.hotkey.bind({"ctrl"}, "H", function()
+hs.hotkey.bind({"ctrl"}, "h", function()
   hs.eventtap.keyStroke({}, "Left")
 end)
 hs.hotkey.bind({"ctrl"}, "l", function()
@@ -24,9 +43,11 @@ end)
 hs.hotkey.bind({"ctrl"}, ";", function()
   hs.eventtap.keyStroke({}, "Backspace")
 end)
-hs.hotkey.bind({"ctrl"}, "0", function()
-  hs.eventtap.keyStroke({}, "Home")
-end)
+
+hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(evt)
+    send_escape = false
+    return false
+end):start()
 
 -- spoon install
 hs.loadSpoon("SpoonInstall")
@@ -62,71 +83,71 @@ Install:andUse("BingDaily",
   }
 )
 
-spoon.SpoonInstall.repos.PaperWM = {
-    url = "https://github.com/mogenson/PaperWM.spoon",
-    desc = "PaperWM.spoon repository",
-    branch = "release",
-}
+--spoon.SpoonInstall.repos.PaperWM = {
+    --url = "https://github.com/mogenson/PaperWM.spoon",
+    --desc = "PaperWM.spoon repository",
+    --branch = "release",
+--}
 
-spoon.SpoonInstall:andUse("PaperWM", {
-    disable = true,
-    repo = "PaperWM",
-    config = { screen_margin = 16, window_gap = 2 },
-    start = true,
-})
+--spoon.SpoonInstall:andUse("PaperWM", {
+    --disable = true,
+    --repo = "PaperWM",
+    --config = { screen_margin = 16, window_gap = 2 },
+    --start = true,
+--})
 
-PaperWM = hs.loadSpoon("PaperWM")
-PaperWM:bindHotkeys({
-    -- switch to a new focused window in tiled grid
-    focus_left  = {hyper, "h"},
-    focus_right = {hyper, "l"},
-    focus_up    = {hyper, "k"},
-    focus_down  = {hyper, "j"},
+--PaperWM = hs.loadSpoon("PaperWM")
+--PaperWM:bindHotkeys({
+    ---- switch to a new focused window in tiled grid
+    --focus_left  = {hyper, "h"},
+    --focus_right = {hyper, "l"},
+    --focus_up    = {hyper, "k"},
+    --focus_down  = {hyper, "j"},
 
-    -- move windows around in tiled grid
-    swap_left  = {hyper_shift, "h"},
-    swap_right = {hyper_shift, "l"},
-    swap_up    = {hyper_shift, "k"},
-    swap_down  = {hyper_shift, "j"},
+    ---- move windows around in tiled grid
+    --swap_left  = {hyper_shift, "h"},
+    --swap_right = {hyper_shift, "l"},
+    --swap_up    = {hyper_shift, "k"},
+    --swap_down  = {hyper_shift, "j"},
 
-    -- position and resize focused window
-    center_window       = {hyper, "c"},
-    full_width          = {hyper, "f"},
-    cycle_width         = {hyper, ";"},
-    reverse_cycle_width = {hyper, "'"},
-    cycle_height        = {hyper, "["},
-   reverse_cycle_height = {hyper, "]"},
+    ---- position and resize focused window
+    --center_window       = {hyper, "c"},
+    --full_width          = {hyper, "f"},
+    --cycle_width         = {hyper, ";"},
+    --reverse_cycle_width = {hyper, "'"},
+    --cycle_height        = {hyper, "["},
+   --reverse_cycle_height = {hyper, "]"},
 
-    -- move focused window into / out of a column
-    slurp_in = {hyper, "i"},
-    barf_out = {hyper, "o"},
+    ---- move focused window into / out of a column
+    --slurp_in = {hyper, "i"},
+    --barf_out = {hyper, "o"},
 
-    --- move the focused window into / out of the tiling layer
-    toggle_floating = {hyper, "escape"},
+    ----- move the focused window into / out of the tiling layer
+    --toggle_floating = {hyper, "escape"},
 
-    -- switch to a new Mission Control space
-    switch_space_1 = {hyper, "1"},
-    switch_space_2 = {hyper, "2"},
-    switch_space_3 = {hyper, "3"},
-    switch_space_4 = {hyper, "4"},
-    switch_space_5 = {hyper, "5"},
-    switch_space_6 = {hyper, "6"},
-    switch_space_7 = {hyper, "7"},
-    switch_space_8 = {hyper, "8"},
-    switch_space_9 = {hyper, "9"},
+    ---- switch to a new Mission Control space
+    --switch_space_1 = {hyper, "1"},
+    --switch_space_2 = {hyper, "2"},
+    --switch_space_3 = {hyper, "3"},
+    --switch_space_4 = {hyper, "4"},
+    --switch_space_5 = {hyper, "5"},
+    --switch_space_6 = {hyper, "6"},
+    --switch_space_7 = {hyper, "7"},
+    --switch_space_8 = {hyper, "8"},
+    --switch_space_9 = {hyper, "9"},
 
-    -- move focused window to a new space and tile
-    move_window_1 = {hyper_shift, "1"},
-    move_window_2 = {hyper_shift, "2"},
-    move_window_3 = {hyper_shift, "3"},
-    move_window_4 = {hyper_shift, "4"},
-    move_window_5 = {hyper_shift, "5"},
-    move_window_6 = {hyper_shift, "6"},
-    move_window_7 = {hyper_shift, "7"},
-    move_window_8 = {hyper_shift, "8"},
-    move_window_9 = {hyper_shift, "9"}
-})
-PaperWM:start()
+    ---- move focused window to a new space and tile
+    --move_window_1 = {hyper_shift, "1"},
+    --move_window_2 = {hyper_shift, "2"},
+    --move_window_3 = {hyper_shift, "3"},
+    --move_window_4 = {hyper_shift, "4"},
+    --move_window_5 = {hyper_shift, "5"},
+    --move_window_6 = {hyper_shift, "6"},
+    --move_window_7 = {hyper_shift, "7"},
+    --move_window_8 = {hyper_shift, "8"},
+    --move_window_9 = {hyper_shift, "9"}
+--})
+--PaperWM:start()
 
 
 -- this is for showing the current app's path, name and input method
