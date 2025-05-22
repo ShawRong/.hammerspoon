@@ -44,7 +44,9 @@ local function remapOption()
             [hs.keycodes.map['e']] = {'='},
             [hs.keycodes.map['u']] = {'-', true},
             [hs.keycodes.map['j']] = {'7', true},
-            [hs.keycodes.map['k']] = {'8', true}
+            [hs.keycodes.map['k']] = {'8', true},
+            [hs.keycodes.map['q']] = {'1', true},
+            [hs.keycodes.map['w']] = {'2', true}
         }
         
         local mapping = keyMappings[keycode]
@@ -89,6 +91,7 @@ local function remapControlToArrow()
             [hs.keycodes.map['k']] = {'up'},
             [hs.keycodes.map['l']] = {'right'},
             [hs.keycodes.map[';']] = {'delete'},
+            [hs.keycodes.map['[']] = {'esc'},
         }
         
         local mapping = keyMappings[keycode]
