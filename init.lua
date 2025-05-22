@@ -26,28 +26,93 @@ hs.hotkey.bind(hyper, "W", function()
   hs.alert.show(result, {}, nil, 10)
 end)
 
+-- key mapping
+-- 高效的方向键映射（option）
+local function remapOption()
+    local handler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
+        local flags = event:getFlags()
+        if not flags.alt then return false end -- Only process option combinations
+        
+        local keycode = event:getKeyCode()
+        local targetKeys = nil
+        
+        local keyMappings = {
+            [hs.keycodes.map[',']] = {'9', true},  -- ( needs shift+9
+            [hs.keycodes.map['.']] = {'0', true},  -- ) needs shift+0
+            [hs.keycodes.map['a']] = {'=', true},  -- ) needs shift+=
+            [hs.keycodes.map['d']] = {'-'},
+            [hs.keycodes.map['e']] = {'='},
+            [hs.keycodes.map['u']] = {'-', true}
+        }
+        
+        local mapping = keyMappings[keycode]
+        
+        if mapping then
+            local key, needShift = mapping[1], mapping[2]
+            
+            -- Create modifier flags if shift is needed
+            local modifiers = needShift and {'shift'} or {}
+            
+            -- Send key press and release
+            hs.eventtap.event.newKeyEvent(modifiers, key, true):post()
+            hs.eventtap.event.newKeyEvent(modifiers, key, false):post()
+            
+            return true -- Prevent original event
+        end
+        
+        return false -- Don't handle other events
+    end)
+    
+    return handler
+end
+
+-- Start event listener
+local remap_option= remapOption()
+remap_option:start()
 
 -- key mapping
-hs.hotkey.bind({"ctrl"}, "j", function()
-  hs.eventtap.keyStroke({}, "Down")
-end)
-hs.hotkey.bind({"ctrl"}, "k", function()
-  hs.eventtap.keyStroke({}, "Up")
-end)
-hs.hotkey.bind({"ctrl"}, "h", function()
-  hs.eventtap.keyStroke({}, "Left")
-end)
-hs.hotkey.bind({"ctrl"}, "l", function()
-  hs.eventtap.keyStroke({}, "Right")
-end)
-hs.hotkey.bind({"ctrl"}, ";", function()
-  hs.eventtap.keyStroke({}, "Backspace")
-end)
+-- 高效的方向键映射（control）
+local function remapControlToArrow()
+    local handler = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
+        local flags = event:getFlags()
+        if not flags.ctrl then return false end -- Only process ctrl combinations
+        
+        local keycode = event:getKeyCode()
+        local targetKeys = nil
+        
+        -- Map control keys to arrow keys and other functions
+        local keyMappings = {
+            [hs.keycodes.map['h']] = {'left'},
+            [hs.keycodes.map['j']] = {'down'},
+            [hs.keycodes.map['k']] = {'up'},
+            [hs.keycodes.map['l']] = {'right'},
+            [hs.keycodes.map[';']] = {'delete'},
+        }
+        
+        local mapping = keyMappings[keycode]
+        
+        if mapping then
+            local key, needShift = mapping[1], mapping[2]
+            
+            -- Create modifier flags if shift is needed
+            local modifiers = needShift and {'shift'} or {}
+            
+            -- Send key press and release
+            hs.eventtap.event.newKeyEvent(modifiers, key, true):post()
+            hs.eventtap.event.newKeyEvent(modifiers, key, false):post()
+            
+            return true -- Prevent original event
+        end
+        
+        return false -- Don't handle other events
+    end)
+    
+    return handler
+end
 
-hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(evt)
-    send_escape = false
-    return false
-end):start()
+-- Start event listener
+local arrowRemapper = remapControlToArrow()
+arrowRemapper:start()
 
 -- spoon install
 hs.loadSpoon("SpoonInstall")
