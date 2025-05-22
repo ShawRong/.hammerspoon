@@ -91,7 +91,7 @@ local function remapControlToArrow()
             [hs.keycodes.map['k']] = {'up'},
             [hs.keycodes.map['l']] = {'right'},
             [hs.keycodes.map[';']] = {'delete'},
-            [hs.keycodes.map['[']] = {'esc'}
+            [hs.keycodes.map['[']] = {'escape'}
         }
         
         local mapping = keyMappings[keycode]
