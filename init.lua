@@ -42,7 +42,9 @@ local function remapOption()
             [hs.keycodes.map['a']] = {'=', true},  -- ) needs shift+=
             [hs.keycodes.map['d']] = {'-'},
             [hs.keycodes.map['e']] = {'='},
-            [hs.keycodes.map['u']] = {'-', true}
+            [hs.keycodes.map['u']] = {'-', true},
+            [hs.keycodes.map['j']] = {'7', true},
+            [hs.keycodes.map['k']] = {'8', true}
         }
         
         local mapping = keyMappings[keycode]
